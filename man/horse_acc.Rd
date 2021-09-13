@@ -10,7 +10,7 @@ horse_acc(data)
 This function calculates the radial acceleration in meters per squaresecond
 from gps velocity (filtered) for multiple rides in the same dataframe
 The dataframe "data" has to be structured as follows:
-col "ID" with horse identifier, col "Zeit" with timestamp,
+col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 col "Delta_t" with time difference in seconds,
 col "V_gefiltert" with filtered velocity in meters per minute
 }

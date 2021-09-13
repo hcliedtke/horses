@@ -10,6 +10,6 @@ horse_GPSDist(data)
 This function calculates the distance (GPSDistance) in meters between locations
 from gps latitude (Lat) and longitude (Lon) for multiple rides in the same dataframe
 The dataframe "data" has to be structured as follows:
-col "ID" with horse identifier, col "Zeit" with timestamp,
+col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 col "Lat" with Latitude (decimal), col "Lon" with Longitude (decimal)
 }

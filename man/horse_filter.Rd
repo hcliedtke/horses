@@ -10,7 +10,7 @@ horse_filter(data)
 This function filters the velocity and heart rate
 for multiple rides in the same dataframe
 The dataframe "data" has to be structured as follows:
-col "ID" with horse identifier, col "Zeit" with timestamp,
+col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 col "Lat" with Latitude (decimal), col "Lon" with Longitude (decimal),
 col "HF" with heart rate in bpm, col "V" with velocity in m/min
 }

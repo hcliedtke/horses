@@ -12,7 +12,7 @@
 #'   Metres.From.Start, Seconds.To.Finish(mm:ss), Metres.To.Finish,
 #'   Seconds.From.Previous(mm:ss), Metres.From.Previous, Comment)
 #' The dataframe "data" has to be structured as follows:
-#' col "ID" with horse identifier, col "Zeit" with timestamp,
+#' col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 #' col "Lat" with Latitude (decimal), col "Lon" with Longitude (decimal),
 #' col "V" with velocity in m/min
 #' col "Bestzeit" with the optimum time ("hms" "difftime", hh:mm:ss)
@@ -92,7 +92,7 @@ horse_findJumps <- function(data) {
   # ------------------------------------------------------------------------------
   # Identify periods of high acceleration as possible start times in data
   # ------------------------------------------------------------------------------
-  data <- data %>% dplyr::mutate(Datum = as.Date(Zeit))
+  data <- data %>% dplyr::mutate(Datum = as.Date(Zeit, tz = "Europe/Berlin"))
   data <- data %>% dplyr::group_by(ID, Datum)
   data <- data %>% dplyr::mutate(acc = tsibble::difference(V))
   data <- data %>% dplyr::mutate(acc = slider::slide(acc, mean, .after = 10))

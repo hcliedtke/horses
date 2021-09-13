@@ -19,7 +19,7 @@ dataframe (Type, Number, Name, Strides, Seconds.From.Start(mm:ss),
 Metres.From.Start, Seconds.To.Finish(mm:ss), Metres.To.Finish,
 Seconds.From.Previous(mm:ss), Metres.From.Previous, Comment)
 The dataframe "data" has to be structured as follows:
-col "ID" with horse identifier, col "Zeit" with timestamp,
+col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 col "Lat" with Latitude (decimal), col "Lon" with Longitude (decimal),
 col "V" with velocity in m/min
 col "Bestzeit" with the optimum time ("hms" "difftime", hh:mm:ss)

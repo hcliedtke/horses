@@ -3,13 +3,13 @@
 #' This function calculates the radial acceleration in meters per squaresecond
 #' from gps velocity (filtered) for multiple rides in the same dataframe
 #' The dataframe "data" has to be structured as follows:
-#' col "ID" with horse identifier, col "Zeit" with timestamp,
+#' col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 #' col "Delta_t" with time difference in seconds,
 #' col "V_gefiltert" with filtered velocity in meters per minute
 
 #' @export
 horse_acc <- function(data) {
-  data <- data %>% dplyr::mutate(Datum = as.Date(Zeit))
+  data <- data %>% dplyr::mutate(Datum = as.Date(Zeit, tz = "Europe/Berlin"))
   data <- data %>% dplyr::group_by(ID, Datum) %>% tidyr::nest()
   data <- data %>% dplyr::mutate(Delta_V = purrr::map(data, ~as.numeric(tsibble::difference(.x$V_gefiltert))))
   data <- tidyr::unnest(data, cols = c(data, Delta_V))

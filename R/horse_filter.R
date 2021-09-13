@@ -3,13 +3,13 @@
 #' This function filters the velocity and heart rate
 #' for multiple rides in the same dataframe
 #' The dataframe "data" has to be structured as follows:
-#' col "ID" with horse identifier, col "Zeit" with timestamp,
+#' col "ID" with horse identifier, col "Zeit" with timestamp (tz = "Europe/Berlin"),
 #' col "Lat" with Latitude (decimal), col "Lon" with Longitude (decimal),
 #' col "HF" with heart rate in bpm, col "V" with velocity in m/min
 
 #' @export
 horse_filter <- function(data) {
-  data <- data %>% dplyr::mutate(Datum = as.Date(Zeit))
+  data <- data %>% dplyr::mutate(Datum = as.Date(Zeit, tz = "Europe/Berlin"))
   data <- data %>% dplyr::mutate(HF = ifelse(HF == 0, NA, HF)) # remove zeros in HF
   data <- data %>% dplyr::group_by(ID, Datum) %>% tidyr::nest() # nest data frame by ID and date
   data <- data %>% # Close small gaps (max 10) in HF by LOCF
