@@ -70,7 +70,7 @@ horse_filter <- function(data) {
   # ----------------------------------------------------------------------------
   # Filter HF (windowsize = 29, p = 3)
   if(sum(data_withoutNA$HF_cor5) == 0) {
-    data_withoutNA$HF_gefiltert <- NA
+    data$HF_gefiltert <- NA
   } else {
     data_withoutNA <- data_withoutNA %>% dplyr::group_by(ID, Datum, HRGroup) %>% tidyr::nest()
     data_withoutNA <- data_withoutNA %>%
