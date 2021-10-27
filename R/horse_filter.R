@@ -80,7 +80,7 @@ horse_filter <- function(data) {
   }
   data <- data %>% dplyr::select(-HRGroup, -HF_cor5)
   # ----------------------------------------------------------------------------
-  # Remove small (< 9) sequences of NA values in HF
+  # Remove small (< 9) sequences of NA values in V
   V_seqs <- as.data.frame(cbind(data$ID, as.character(data$Datum),
                                 !is.na(data$V_LOCF), !is.na(data$V_LOCF)))
   colnames(V_seqs) <- c("ID", "Datum", "run", "values")
@@ -119,7 +119,7 @@ horse_filter <- function(data) {
   data_withoutNA <- data %>% dplyr::filter(!is.na(V_LOCF))
   data_withoutNA <- data_withoutNA %>% dplyr::group_by(ID, Datum, VGroup) %>% tidyr::nest()
   # ----------------------------------------------------------------------------
-  # Filter HF (windowsize = 9, p = 3)
+  # Filter V (windowsize = 9, p = 3)
   data_withoutNA <- data_withoutNA %>%
     dplyr::mutate(V_gefiltert = purrr::map(data, ~signal::sgolayfilt(.x$V_LOCF, p = 3, n = 9)))
   data_withoutNA <- tidyr::unnest(data_withoutNA, cols = c(data, V_gefiltert))
