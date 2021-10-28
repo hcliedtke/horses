@@ -29,7 +29,7 @@ horse_filter <- function(data) {
   data <- dplyr::ungroup(data)
   data <- data %>% dplyr::select(-HF_LOCF, -HF_mean9)
   # ----------------------------------------------------------------------------
-  # Remove small (< 29) sequences of NA values in HF
+  # Remove small (< 29) sequences of non-NA values in HF
   HR_seqs <- as.data.frame(cbind(data$ID, as.character(data$Datum),
                                  !is.na(data$HF_cor5), !is.na(data$HF_cor5)))
   colnames(HR_seqs) <- c("ID", "Datum", "run", "values")
@@ -80,14 +80,15 @@ horse_filter <- function(data) {
   }
   data <- data %>% dplyr::select(-HRGroup, -HF_cor5)
   # ----------------------------------------------------------------------------
-  # Remove small (< 9) sequences of NA values in V
+  # Remove small (< 9) sequences of non-NA values in V
   V_seqs <- as.data.frame(cbind(data$ID, as.character(data$Datum),
                                 !is.na(data$V_LOCF), !is.na(data$V_LOCF)))
   colnames(V_seqs) <- c("ID", "Datum", "run", "values")
   runs <- V_seqs %>% dplyr::group_by(run = data.table::rleid(ID, Datum, run), ID, Datum) %>%
     summarise(values = dplyr::first(values), lengths = n())
   if (any(runs$lengths[runs$values == TRUE] < 9)) {
-    runs <- runs %>% dplyr::mutate(end = cumsum(lengths))
+    end <- cumsum(runs$lengths)
+    runs$end <- end
     runs <- runs %>% dplyr::mutate(start = end-lengths+1)
     short <- runs %>% dplyr::filter(lengths < 9 & values == TRUE)
     start <- short$start
