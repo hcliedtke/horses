@@ -4,7 +4,7 @@
 \alias{horse_findJumps}
 \title{Horse Find Jumps}
 \usage{
-horse_findJumps(data)
+horse_findJumps(data, kml, efforts)
 }
 \description{
 This function overlays data from Cross-Country App and finds

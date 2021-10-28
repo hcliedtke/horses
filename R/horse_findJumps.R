@@ -20,7 +20,7 @@
 #' col "Zeit_Gelände" with ridden cross-country time ("hms" "difftime", hh:mm:ss)
 
 #' @export
-horse_findJumps <- function(data) {
+horse_findJumps <- function(data, kml, efforts) {
   # ----------------------------------------------------------------------------
   # Convert sec from start to time in min
   # ----------------------------------------------------------------------------
