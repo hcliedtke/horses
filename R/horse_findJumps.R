@@ -100,10 +100,9 @@ horse_findJumps <- function(data) {
   # ------------------------------------------------------------------------------
   # Find start time on different tracks
   # ------------------------------------------------------------------------------
-  data <- data %>% dplyr::mutate(ID_Datum = paste0(ID, "_", Datum))
   Start <- function(filter) {
     filter = dplyr::enquo(filter)
-    data_filtered <- data %>% dplyr::filter(ID_Datum == !!filter & acc > 15)
+    data_filtered <- data %>% dplyr::filter(ID == !!filter & acc > 15)
     LatNull <- Coordinates$lat[Coordinates$Name == "Start"]
     LonNull <- Coordinates$lon[Coordinates$Name == "Start"]
     x <- ((data_filtered$Lon-LonNull)*pi/180)*cos((data_filtered$Lat*pi)/180)*6371000
@@ -112,13 +111,12 @@ horse_findJumps <- function(data) {
     index <- which.min(Distance)
     data_filtered$Zeit[index]
   }
-  ID_list <- unique(data$ID_Datum)
+  ID_list <- unique(data$ID)
   Start_Times <- sapply(ID_list, Start, simplify = FALSE)
   Start_Times <- as.data.frame(Start_Times)
   colnames(Start_Times) <- paste0("ID", ID_list)
   Start_XC <- Start_Times %>% tidyr::pivot_longer(cols = dplyr::everything(), names_to = "ID",
                                            values_to = "Start")
-  Start_XC <- Start_XC %>% dplyr::mutate(ID = as.numeric(unlist(str_split(ID, "_"))))
   Start_XC <- Start_XC %>% dplyr::mutate(ID = as.numeric(gsub("ID", "", ID)))
   data <- dplyr::left_join(data, Start_XC)
   # ------------------------------------------------------------------------------
