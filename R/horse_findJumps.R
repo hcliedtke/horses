@@ -194,6 +194,7 @@ horse_findJumps <- function(data, kml, efforts) {
     names(newlist) <- incompleteXC
     Jump_Times_oNA <- Jump_Times %>% dplyr::select(!all_of(incompleteXC))
     Jump_Times <- cbind(Jump_Times_oNA, newlist)
+  }
     Jump_Times_IDs <- Jump_Times %>% dplyr::select(-Efforts, -Index) %>% as.matrix()
     #Jump_Times_IDs <- apply(Jump_Times_IDs, 2, sort, na.last = TRUE)
     Jump_Times_ordered <- cbind(Jump_Times_IDs, dplyr::select(Jump_Times, Efforts, Index))
@@ -227,5 +228,4 @@ horse_findJumps <- function(data, kml, efforts) {
                                    Zeit >= Start_Zeit &
                                      Zeit <= Ziel_Zeit ~ "XC",
                                    Zeit > Ziel_Zeit ~ "CD"))
-  }
 }
