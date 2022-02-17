@@ -11,8 +11,8 @@ horse_GPSDist <- function(data) {
   data <- data %>% dplyr::mutate(Datum = as.Date(Zeit, tz = "Europe/Berlin"))
   data <- data %>% dplyr::group_by(ID, Datum) %>% tidyr::nest()
   data <- data %>% dplyr::mutate(Delta_t = purrr::map(data, ~as.numeric(tsibble::difference(.x$Zeit))))
-  data <- data %>% dplyr::mutate(Lon_first = purrr::map(data, ~dplyr::first(.x$Lon)))
-  data <- data %>% dplyr::mutate(Lat_first = purrr::map(data, ~dplyr::first(.x$Lat)))
+  data <- data %>% dplyr::mutate(Lon_first = purrr::map(data, ~dplyr::first(na.omit(.x$Lon))))
+  data <- data %>% dplyr::mutate(Lat_first = purrr::map(data, ~dplyr::first(na.omit(.x$Lat))))
   data <- tidyr::unnest(data, cols = c(data, Delta_t, Lon_first, Lat_first))
   data <- data %>%
     dplyr::mutate(x = ((Lon - Lon_first)*pi/180)*cos((Lat*pi)/180)*6371000)
