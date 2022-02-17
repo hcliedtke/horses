@@ -10,7 +10,7 @@
 horse_findPhases <- function(data) {
   data <- data %>% dplyr::mutate(Datum = as.Date(Zeit, tz = "Europe/Berlin"))
   data <- data %>% dplyr::group_by(ID, Datum) %>% tidyr::nest() # nest data frame by ID and date
-  
+
   data <- data %>% # Close small gaps (max 10) in V by LOCF
     dplyr::mutate(V_LOCF = purrr::map(data, ~zoo::na.locf(.x$V, na.rm = FALSE,
                                                           fromLast = FALSE, maxgap = 10)))
@@ -66,17 +66,13 @@ horse_findPhases <- function(data) {
     dplyr::mutate(V_gefiltert = ifelse(V_gefiltert < 0, 0, V_gefiltert))
   # ----------------------------------------------------------------------------
   # assign gait by filtered velocity when not measured
-  if(is.na(mean(data$Gait))) {
-    data <- data %>%
-      dplyr::mutate(Gangart = case_when(V_gefiltert <= 120 ~ "Schritt",
-                                        V_gefiltert > 120 & V_gefiltert <= 250 ~ "Trab",
-                                        V_gefiltert > 250 ~ "Galopp"))
-  } else {
-    data <- data %>%
-      dplyr::mutate(Gangart = case_when(Gait <= 1 ~ "Schritt",
-                                        Gait == 2 ~ "Trab",
-                                        Gait == 3 ~ "Galopp"))
-  }
+  data <- data %>%
+    dplyr::mutate(Gangart = case_when(is.na(Gait) & V_gefiltert <= 120 ~ "Schritt",
+                                      is.na(Gait) & V_gefiltert > 120 & V_gefiltert <= 250 ~ "Trab",
+                                      is.na(Gait) & V_gefiltert > 250 ~ "Galopp",
+                                      Gait <= 1 ~ "Schritt",
+                                      Gait == 2 ~ "Trab",
+                                      Gait == 3 ~ "Galopp"))
   data <- data %>%
     dplyr::mutate(GangInt = case_when(Gangart == "Schritt" ~ "S",
                                       Gangart == "Trab" ~ "TG",
@@ -124,7 +120,7 @@ horse_findPhases <- function(data) {
     runs$values[1] <- "WU"
     runs$values[nrow(runs)] <- "CD"
     Arbeitsphase <- runs %>% dplyr::filter(values == "A"|values == "P")
-    
+
     if(nrow(Arbeitsphase) == 0) {
       rep(NA, nrow(data_filtered))
     } else {

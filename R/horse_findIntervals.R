@@ -66,17 +66,13 @@ horse_findIntervals <- function(data) {
     dplyr::mutate(V_gefiltert = ifelse(V_gefiltert < 0, 0, V_gefiltert))
   # ----------------------------------------------------------------------------
   # assign gait by filtered velocity when not measured
-  if(is.na(mean(data$Gait))) {
-    data <- data %>%
-      dplyr::mutate(Gangart = case_when(V_gefiltert <= 120 ~ "Schritt",
-                                        V_gefiltert > 120 & V_gefiltert <= 250 ~ "Trab",
-                                        V_gefiltert > 250 ~ "Galopp"))
-  } else {
-    data <- data %>%
-      dplyr::mutate(Gangart = case_when(Gait <= 1 ~ "Schritt",
-                                        Gait == 2 ~ "Trab",
-                                        Gait == 3 ~ "Galopp"))
-  }
+  data <- data %>%
+    dplyr::mutate(Gangart = case_when(is.na(Gait) & V_gefiltert <= 120 ~ "Schritt",
+                                      is.na(Gait) & V_gefiltert > 120 & V_gefiltert <= 250 ~ "Trab",
+                                      is.na(Gait) & V_gefiltert > 250 ~ "Galopp",
+                                      Gait <= 1 ~ "Schritt",
+                                      Gait == 2 ~ "Trab",
+                                      Gait == 3 ~ "Galopp"))
   data <- data %>%
     dplyr::mutate(GangInt = case_when(Gangart == "Schritt" ~ "ST",
                                       Gangart == "Trab" ~ "ST",
