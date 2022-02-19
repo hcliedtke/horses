@@ -24,7 +24,8 @@ horse_findIntervals <- function(data) {
   runs <- V_seqs %>% dplyr::group_by(run = data.table::rleid(ID, Datum, run), ID, Datum) %>%
     summarise(values = dplyr::first(values), lengths = n())
   if (any(runs$lengths[runs$values == TRUE] < 21)) {
-    runs <- runs %>% dplyr::mutate(end = cumsum(lengths))
+    end <- cumsum(runs$lengths)
+    runs$end <- end
     runs <- runs %>% dplyr::mutate(start = end-lengths+1)
     short <- runs %>% dplyr::filter(lengths < 21 & values == TRUE)
     start <- short$start
