@@ -52,7 +52,7 @@ horse_findIntervals <- function(data) {
   b <- length(runs$lengths)
   x <- 1:b
   list <- sapply(x, FUN)
-  vec <- unlist(list)
+  vec <- Reduce(c, list)
   data <- data %>% dplyr::mutate(VGroup = vec)
   data_withoutNA <- data %>% dplyr::filter(!is.na(V_LOCF))
   data_withoutNA <- data_withoutNA %>% dplyr::group_by(ID, Datum, VGroup) %>% tidyr::nest()
