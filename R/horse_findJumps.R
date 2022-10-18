@@ -1,4 +1,4 @@
-#' Horse Find Jumps
+#' Horse Find Jumps -HCL version
 #'
 #' This function overlays data from Cross-Country App and finds
 #' location of jumps on gps tracks for multiple rides in one dataframe
